@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Home Page</title>
+  <link th:href="@{/css/style.css}" rel="stylesheet" />
+</head>
+<body>
+<div class="main">
+<h1>Ежедневник</h1>
+<h2>Просмотр задач</h2>
+  <div class="menu">
+<a href="/tasks">Все</a>
+<a th:each="status : ${T(ru.gb.HomeWork5.models.TaskStatus).values()}"
+   th:href="@{~/tasks/status/{status_name}(status_name=${status})}"
+   th:text="${status}">Все</a>
+  </div>
+<table>
+  <tr>
+    <th>Описание задачи</th>
+    <th>Статус задачи</th>
+    <th>Дата создания</th>
+    <th>Удалить</th>
+  </tr>
+  <tr th:each="t: ${tasks}" >
+
+    <td th:text="${t.description}"></td>
+    <td>
+      <form action="/tasks/update" method="post">
+        <select name="status">
+          <option th:each="status : ${T(ru.gb.HomeWork5.models.TaskStatus).values()}"
+                  th:value="${status}"
+                  th:text="${status}"
+                  th:selected="${status==t.status}">
+          </option>
+        </select>
+        <input type="hidden" name="id" th:value="${t.id}">
+        <button type="submit">Обновить статус</button>
+      </form>
+    </td>
+
+
+    <td th:text="${t.getFormattedCreateDate()}"></td>
+    <td><a th:href="@{~/tasks/del/{id}(id=${t.id})}">Удалить</a></td>
+  </tr>
+</table>
+<div class="addTask">
+<h2>Добавить задачу</h2>
+<form action="/tasks" method="post">
+  Имя: <input type="text" name="description"><br />
+  Статус:
+  <select name="status">
+    <option th:each="status : ${T(ru.gb.HomeWork5.models.TaskStatus).values()}"
+            th:value="${status}"
+            th:text="${status}">
+    </option>
+  </select></br>
+  <button type="submit">Добавить задачу</button>
+</form>
+</div>
+</div>
+</body>
+</html>
