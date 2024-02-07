@@ -37,7 +37,7 @@ public class TaskWebController {
         return "tasks.html";
     }
     @GetMapping("/status/{status}")
-    public String deleteTask(@PathVariable("status") TaskStatus status, Model model){
+    public String getTaskByStatus(@PathVariable("status") TaskStatus status, Model model){
         List<Task> tasks=taskService.getTaskByStatus(status);
         model.addAttribute("tasks",tasks);
         return "tasks.html";
